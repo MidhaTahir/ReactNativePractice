@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet } from 'react-native';
 
 const ColorBox = ({ colorName, hexCode }) => {
     const boxColor = {
@@ -8,7 +8,7 @@ const ColorBox = ({ colorName, hexCode }) => {
     }
     return (
         <View>
-            <Text style={[styles.all,boxColor]}>{colorName}: {hexCode}</Text>
+            <Text style={[styles.all,styles.box,boxColor]}>{colorName}: {hexCode}</Text>
         </View>
     )
 }
@@ -20,6 +20,15 @@ const styles = StyleSheet.create({
       marginVertical : 10,
       textAlign: "center",
       textAlignVertical:"center",
+    },
+    box:{
+        // IOS
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.3,
+        shadowRadius: 1,
+        // elevation for android phones
+        elevation: 2,
     }
   })
 
