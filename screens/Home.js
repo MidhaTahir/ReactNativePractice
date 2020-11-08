@@ -1,18 +1,11 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { StyleSheet } from "react-native";
-import { FlatList } from "react-native-gesture-handler";
+import { FlatList, TouchableOpacity, Text } from "react-native";
 import PalettePreview from "../components/PalettePreview";
-import  { SOLARIZED, RAINBOW, FRONTEND_MASTERS } from "./DATA";
 import axios from 'react-native-axios';
 
-const COLOR_PALETTES = [
-    { paletteName: 'SOLARIZED' , colors: SOLARIZED },
-    { paletteName: 'RAINBOW' , colors: RAINBOW },
-    { paletteName: 'FRONTEND_MASTERS' , colors: FRONTEND_MASTERS }
-]
-
-const Home = ({ navigation }) => {
-
+const Home = ({ navigation , route }) => {
+    const newColorPalette = route.params ? route.params.newColorPalette : null;
     const [colors, setColors] = useState([])
     const [isRefreshing,setIsRefreshing] = useState(false);
 
@@ -25,7 +18,7 @@ const Home = ({ navigation }) => {
 
     useEffect(() => {
         handlePress();
-    }, [])
+    }, [colors])
 
 
     const handleRefresh = useCallback(()=>{
@@ -36,6 +29,13 @@ const Home = ({ navigation }) => {
         },[3000])
     },[])
     
+//for adding new color palette
+    useEffect(()=>{
+        if (newColorPalette) {
+            setColors(currentpalettes => [newColorPalette, ...currentpalettes])
+        }
+    },[newColorPalette]);
+
     return(
         <FlatList 
             style={styles.list}
@@ -49,13 +49,25 @@ const Home = ({ navigation }) => {
             )}
             refreshing={isRefreshing}
             onRefresh={handleRefresh}
+            ListHeaderComponent={
+                <TouchableOpacity onPress={()=> { navigation.navigate('ColorPaletteModal')}}>
+                    <Text style={styles.text}>Add Color Scheme</Text>
+                </TouchableOpacity>}
         />
     )
 }
+
+
 const styles = StyleSheet.create({
     list:{
         padding : 10,
         backgroundColor: "white"
+    },
+    text:{
+        fontSize: 18,
+        color : 'teal',
+        fontWeight: 'bold',
+        marginBottom: 10,
     }
 })
 
